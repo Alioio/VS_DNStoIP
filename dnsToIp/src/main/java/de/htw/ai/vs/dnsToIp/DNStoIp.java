@@ -2,16 +2,32 @@ package de.htw.ai.vs.dnsToIp;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.swing.text.Utilities;
 
 public class DNStoIp {
 
+	 private static Pattern VALID_IPV4_PATTERN = null;
+	 private static Pattern VALID_IPV6_PATTERN = null;
+	 private static final String ipv4Pattern = "(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])";
+	 private static final String ipv6Pattern = "([0-9a-f]{1,4}:){7}([0-9a-f]){1,4}";
+
+	
 	public static void main(String[] args) {
 
-		// args empty?
-		// to short?
+
+		IpValidator ipvalidate = new IpValidator();
+		
+		
+		// check if argument exits (min. 3 max 253 characters)
+		// check if valid ip adress if yes respond with hostname
+		// check if valid hostname if yes respond with ip adress
 
 		getDNSofIP(args[0]);
 		getDNSofIP(args[0]);
+	
 
 	}
 
@@ -49,5 +65,8 @@ public class DNStoIp {
 			System.out.println("Host not found: " + e.getMessage());
 		}
 	}
+	
+	
+
 
 }
