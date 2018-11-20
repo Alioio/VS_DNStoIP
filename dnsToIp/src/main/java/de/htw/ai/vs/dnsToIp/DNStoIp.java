@@ -8,65 +8,70 @@ import java.util.regex.Pattern;
 import javax.swing.text.Utilities;
 
 public class DNStoIp {
-
-	 private static Pattern VALID_IPV4_PATTERN = null;
-	 private static Pattern VALID_IPV6_PATTERN = null;
-	 private static final String ipv4Pattern = "(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])";
-	 private static final String ipv6Pattern = "([0-9a-f]{1,4}:){7}([0-9a-f]){1,4}";
-
 	
 	public static void main(String[] args) {
-
-
-		IpValidator ipvalidate = new IpValidator();
 		
-		
-		// check if argument exits (min. 3 max 253 characters)
-		// check if valid ip adress if yes respond with hostname
-		// check if valid hostname if yes respond with ip adress
-
-		getDNSofIP(args[0]);
-		getDNSofIP(args[0]);
+		if(args.length == 0){
+			System.out.println("Bitte geben sie ein hostnamen oder Ip als argument ein.");
+		}else{
+		System.out.println(ipDNSConvert(args[0]));
+		}
+	}
 	
+	protected static String ipDNSConvert(String ipOrDNS){
+		
+		IpValidator ipvalidate = new IpValidator();
+		String ip =  getIPofDNS(ipOrDNS);
+		getDNSofIP(ip);
+		
+		 if(!validInput(ipOrDNS)){
+			 return "Plese type a valid IP or Hostname as argument";
+		 }else if(ipvalidate.validate(ipOrDNS)){
+			 return getDNSofIP(ipOrDNS);
+		 }else{
+			 return getIPofDNS(ipOrDNS);
+		 }
 
 	}
+	
+	private static boolean validInput(String input){	
+		if (input.length() <= 3 || input.length() >253  ){
+			return false;
+		}else{
+			return true;
+		}
+	}
 
-	protected static void getIPofDNS(String hostname) {
-
+	protected static String getIPofDNS(String hostname) {
 		try {
 			InetAddress inetAddr = InetAddress.getByName(hostname);
-			byte[] addr = inetAddr.getAddress();
-			// Convert to dot representation
-			String ipAddr = "";
-			for (int i = 0; i < addr.length; i++) {
-				if (i > 0) {
-					ipAddr += ".";
-				}
-				ipAddr += addr[i] & 0xFF;
-			}
-			System.out.println("IP Address: " + ipAddr);
+			byte[]  addrInBytes = inetAddr.getAddress();
+			String ipAddr = ConvertToDotRepr(addrInBytes);
+			return "IP: "+ipAddr;
 		} catch (UnknownHostException e) {
-			System.out.println("Host not found: " + e.getMessage());
+			return "IP Adress not found: " + e.getMessage();
 		}
-
+	}
+	
+	private static String ConvertToDotRepr(byte[] addrInBytes){
+		String ipAddr = "";
+		for (int i = 0; i < addrInBytes.length; i++) {
+			if (i > 0) {
+				ipAddr += ".";
+			}
+			ipAddr += addrInBytes[i] & 0xFF;
+		}	
+		return ipAddr;	
 	}
 
-	protected static void getDNSofIP(String ipAdress) {
-
+	protected static String getDNSofIP(String ipAdress) {
 		try {
 			InetAddress inetAddr = InetAddress.getByName(ipAdress);
-			// Get the host name
 			String hostname = inetAddr.getHostName();
-			// Get canonical host name
-			String canonicalHostname = inetAddr.getCanonicalHostName();
-			System.out.println("Hostname: " + hostname);
-			System.out.println("Canonical Hostname: " + canonicalHostname);
+			return "Host: "+hostname;
 		} catch (UnknownHostException e) {
-			System.out.println("Host not found: " + e.getMessage());
+			return "Hostname not found: " + e.getMessage();	
 		}
 	}
-	
-	
-
 
 }
