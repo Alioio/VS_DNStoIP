@@ -2,10 +2,6 @@ package de.htw.ai.vs.dnsToIp;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.swing.text.Utilities;
 
 public class DNStoIp {
 	
