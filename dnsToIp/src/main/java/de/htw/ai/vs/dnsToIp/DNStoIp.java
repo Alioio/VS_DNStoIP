@@ -8,7 +8,7 @@ public class DNStoIp {
 	public static void main(String[] args) {
 
 		if (args.length == 0) {
-			System.out.println("Bitte geben sie ein hostnamen oder Ip als argument ein.");
+			System.out.println("Please insert an argument. IP or Hostname.");
 		} else {
 			System.out.println(ipDNSConvert(args[0]));
 		}
@@ -48,7 +48,6 @@ public class DNStoIp {
 			return "IP Adress not found: " + e.getMessage();
 		}
 	}
-
 	private static String ConvertToDotRepr(byte[] addrInBytes) {
 		String ipAddr = "";
 		for (int i = 0; i < addrInBytes.length; i++) {
